@@ -146,7 +146,7 @@ app.get('/auth/github/callback',passport.authenticate('github', { failureRedirec
 //----------------------------------------------------------------------
 //3.Remote Database connection
 //----------------------------------------------------------------------
-connected with remote server
+// connected with remote server
 mongoose.connect(`${process.env.MONGODB_PREFIX}${process.env.DB_USER}:${process.env.DB_PASS}${process.env.MONGODB_CLUSTER}${process.env.DB_NAME}${process.env.MONGODB_END}`,{
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -356,9 +356,6 @@ app.use('/graphql',graphqlHTTP({
 app.get('/', (req, res) => {
   res.send('Welcome to Node React Redux Graphql and Mongoose Website!')
 })
-
-
-
 
 
 
