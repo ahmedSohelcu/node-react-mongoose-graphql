@@ -1,0 +1,55 @@
+GraphQl Insert Data
+
+===========================================================
+1.User..
+============================================================
+mutation{
+  addUser(googleId:"2355654s656",username:"Saiful",email:"saiful@gmail.com",phone:"021564566566"){
+    username
+    email
+    phone
+  }
+}
+
+===========================================================
+2.Customer 
+===========================================================
+
+
+
+===========================================================
+3.Invoice..
+============================================================
+mutation{
+  addInvoice(customer:"613b7ff836600ed3ec94fd9e",orderNo:"#01231df12112",invoiceNo:"AS212212121",shipping:100){
+		orderNo
+    shipping
+  }
+}
+
+
+============================================================
+4.Invoice items
+============================================================
+mutation{
+  addInvoiceItem(invoice:"613b92aa9e20e421fbae2aed",productName:"Mac Laptop",unitPrice:150000,totalQuantity:1){
+       productName 
+  }
+}
+
+
+
+
+============================================================
+        GraphQl fetch Data
+============================================================
+query{
+  users {
+    id
+    username
+    githubId
+    googleId
+    phone
+    email    
+  }
+}

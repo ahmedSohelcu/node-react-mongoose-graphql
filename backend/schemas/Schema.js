@@ -139,9 +139,9 @@ const InvoiceItemType = new GraphQLObjectType({
     unitPrice:{
       type:GraphQLInt
     },
-    unitQuantity:{
-      type:GraphQLInt
-    },
+    // unitQuantity:{
+    //   type:GraphQLInt
+    // },
     totalQuantity:{
       type:GraphQLInt
     },
@@ -229,23 +229,48 @@ const Mutation = new GraphQLObjectType({
     addInvoice:{
       type:InvoiceType,
       args:{
-        // customer:{type:GraphQLID},
+        customer:{type:GraphQLID},
         invoiceNo:{type:GraphQLString},
         orderNo:{type:GraphQLString},
-        // shipping:{type:GraphQLInt},
-        // date:{type:GraphQLString},
+        shipping:{type:GraphQLInt},
+        date:{type:GraphQLString},
       },
       resolve(parent,args){
         let invoice = new Invoice({
-          // customer:args.customer,
+          customer:args.customer,
           invoiceNo:args.invoiceNo,
           orderNo:args.orderNo,
-          // shipping:args.shipping,
-          // date:args.date,
+          shipping:args.shipping,
+          date:args.date,
         });
         return invoice.save();
       }
     },
+
+    //------------------------------
+    //Store Invoice item
+    //------------------------------
+    addInvoiceItem:{
+      type:InvoiceItemType,
+      args:{
+        invoice:{type:GraphQLID},
+        productName:{type:GraphQLString},
+        unitPrice:{type:GraphQLInt},
+        // unitQuantity:{type:GraphQLInt},
+        totalQuantity:{type:GraphQLInt},
+      },
+      resolve(parent,args){
+        let invoiceItem = new InvoiceItem({
+          invoice:args.invoice,
+          productName:args.productName,
+          unitPrice:args.unitPrice,
+          // unitQuantity:args.unitQuantity,
+          totalQuantity:args.totalQuantity,
+        });
+        return invoiceItem.save();
+      }
+    },
+
 
   }
 });

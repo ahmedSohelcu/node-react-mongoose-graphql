@@ -16,10 +16,10 @@ const invoiceItemsSchema = mongoose.Schema({
     require:true
   },
 
-  unitQuantity:{
-    type:Number,
-    require:true
-  },
+  // unitQuantity:{
+  //   type:Number,
+  //   require:true
+  // },
 
   totalQuantity:{
     type:Number,
