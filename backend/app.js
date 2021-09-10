@@ -354,7 +354,7 @@ app.use('/graphql',graphqlHTTP({
 //----------------------------------------------------------------------------------------------------
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('Welcome to Node React Redux Graphql and Mongoose Website!')
 })
 
 
