@@ -1,0 +1,165 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+ul.navbar-nav{
+  margin: 0 auto;
+}
+
+ul.navbar-nav a{
+  margin-right: 2px;
+}
+
+
+.validation_error_message {
+  text-align: left;
+  color: yellow;
+  font-weight: 500;
+}
+
+.errMsg{color:yellow;text-align: left;}
+.buttonWrapper button {
+  width: 20%;
+  margin: 0 3px;
+  float: right;
+}
+
+.navbar-nav a {
+	background: #073642 !important;
+}
+
+
+.float_left{
+  float:left!important
+}
+
+/* 
+=======================================================================\*/
+/* css for invoice lists*/
+/* =======================================================================*/
+.invoice_lists_wrapper{min-height:600px}
+
+
+.profile_picture img {
+  width: 115px;
+  height: 115px;
+  border-radius: 500px;
+  QUOTES: block;
+  margin: 0 auto;
+  background: #fff!important;
+  /* margin: 9px; */
+}
+
+
+/*=======================================================================\*/
+/* css for login page auth 2 logo */
+/* =======================================================================*/
+.auth_2_logo {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	border: 1px solid #002B36;
+	display: inline-block;
+	margin: 5px -3px 0;
+	background: #1D4853;
+	padding: 22px 0px 60px 0;
+	border-radius: 7px;
+}
+.google_logo {
+	height: 131px;
+	width: 390px;
+	border-radius: 5px;
+	margin: -12px 0px -27px 0;
+}
+.github_logo {
+	height: 49px;
+	width: 305px;
+	border-radius: 5px;
+	margin: -3px 10px 0 0;
+}
+/* 
+=======================================================================\*/
+/* css fro customize scrollbar */
+/* =======================================================================*/
+/* Works on Firefox */
+* {
+  scrollbar-width: thin;
+  /* scrollbar-color: rgb(5, 76, 92) #002B36; */
+  scrollbar-color: #14353b #1E434A;
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #1E434A;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #14353b;
+  border-radius: 20px;
+  border: 3px solid #1E434A;
+}
+
+
+
+/* 
+=======================================================================\*/
+/* responsive css*/
+/* =======================================================================*/
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 1200px) {
+  /* body{background: yellow!important;} */
+} 
+
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1400px) {
+  /* body{background: red!important;} */
+} 
+
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1600px) {
+  /* body{background: pink!important;} */
+
+ 
+}

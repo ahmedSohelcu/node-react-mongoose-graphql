@@ -1,0 +1,210 @@
+---------------
+add method one
+---------------
+components/AddTutorial.js
+
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { createTutorial } from "../actions/tutorials";
+
+const AddTutorial = () => {
+  const initialTutorialState = {
+    id: null,
+    title: "",
+    description: "",
+    published: false
+  };
+  const [tutorial, setTutorial] = useState(initialTutorialState);
+  const [submitted, setSubmitted] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const handleInputChange = event => {
+    const { name, value } = event.target;
+    setTutorial({ ...tutorial, [name]: value });
+  };
+
+  const saveTutorial = () => {
+    const { title, description } = tutorial;
+
+    dispatch(createTutorial(title, description))
+      .then(data => {
+        setTutorial({
+          id: data.id,
+          title: data.title,
+          description: data.description,
+          published: data.published
+        });
+        setSubmitted(true);
+
+        console.log(data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+
+  const newTutorial = () => {
+    setTutorial(initialTutorialState);
+    setSubmitted(false);
+  };
+
+  return (
+    ...
+  );
+};
+
+export default AddTutorial;
+
+//--------------------------------
+method 2
+----------------------------------
+function AddTodo(props) {
+  const history = useHistory();
+  //-----------------------------------------------
+  //first way
+  //-----------------------------------------------
+  // const [msg, setMsg] = useState({});
+
+ //------------------------------------------------
+ //Initial error message
+ //------------------------------------------------
+  const [error,setError] = useState('');
+  
+  //------------------------------------------------
+  //form data 
+  //------------------------------------------------
+  const [name,setName] = useState('');
+  const [description,setDescription] = useState('');
+  const [dead_line, setDeadline] = useState(new Date());
+
+ //------------------------------------------------
+ //response
+ //------------------------------------------------
+  const dispatch = useDispatch();
+  const state = useSelector(state=>state.createTodo);
+  //when success
+  const {loading,message,status,errors} = state;
+
+  if(status === true){
+    //alert('true');
+    // setName('');
+   // setDescription('');
+    // setDeadline('');
+    dispatch(fetchTodoListsAction());
+  }
+  // else{
+  //   alert('false');
+  // }
+  
+  //-------------------------------------------
+  //validation error
+  //-------------------------------------------
+  if(errors){
+    const {name,description,dead_line} = errors;    
+  }
+  
+ //------------------------------------------------
+ //Another way
+ //------------------------------------------------
+  // const [todo, setTodo] = useState({
+  //   name:'',
+  //   description:'',
+  //   dead_line:'',
+  //   user_id:'',
+  // });
+
+  // const handleInputChange = (e)=>{
+  //   e.preventDefault();
+  //  const { name, value } = e.target;
+  //  setTodo({...todo,[name]:[value]})
+  //   console.log(todo);
+  // };
+
+  const submitTodoForm = (e)=>{
+    e.preventDefault();
+    //clear the previous error message before submit forms
+    setError('');
+    //console.log(name+description+dead_line);
+    // if(!name || !description || !dead_line){
+    //   setError('All input field must need to fill up');
+    // }else{
+        dispatch(createTodoAction(name,description,dead_line))
+        .then(response=>{
+          console.log('response');
+          console.log(response);
+        })
+    }
+  // };
+
+  
+  //-----------------------------------------------
+  //UseEffect
+  //-----------------------------------------------    
+  useEffect((e)=>{
+   // dispatch(fetchTodoListsAction())
+    //console.log('from child');
+  },[]);
+
+
+
+  return (
+    <Fragment>
+      
+       { loading?<p>Loading</p>: ''}
+
+      <form onSubmit={submitTodoForm}>
+        { error ? <p className="text-light">{error}</p> : '' }        
+        <fieldset>  
+          <div className="form-group">
+            <label className="form-label mt-4 float-left">Name</label>
+           
+            <input type="text" 
+                className="form-control"                 
+                name="name" 
+                placeholder="Enter Name"
+                // onChange={handleInputChange}
+                onChange={e=>setName(e.target.value)}
+                value={name}
+              />              
+              <div className="validation_error_message">
+                { errors&&errors.name?<p>{errors.name[0]}</p>: ''}              
+              </div>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label mt-4 float-left">Deadline</label>
+            <DatePicker className="form-control" selected={dead_line} onChange={(date) => setDeadline(date)} />
+            <div className="validation_error_message">
+              { errors&&errors.dead_line?<p>{errors.dead_line[0]}</p>: ''}   
+            </div>
+
+          </div>
+
+          <div className="form-group">
+            <label className="form-label mt-4 float-left">Details</label>
+            <textarea 
+                rows="5"
+                className="form-control"
+                placeholder="Enter details"
+                name="description"
+                value={description}
+                // onChange={handleInputChange}                
+                onChange={e=>setDescription(e.target.value)}
+                >
+              </textarea>  
+              <div className="validation_error_message">{ errors&&errors.description?<p>{errors.description[0]}</p>: ''}</div>
+          </div>                 
+          
+          <br/>
+          <div className="form-group">
+            <button type="submit" className="form-control btn btn-primary float-right">Add Todo</button>            
+          </div>
+        </fieldset>    
+      </form>
+    </Fragment>
+  )
+}
+
+
+export default AddTodo;
