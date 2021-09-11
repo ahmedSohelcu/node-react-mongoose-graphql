@@ -4,26 +4,52 @@ GraphQl Insert Data
 1.User..
 ============================================================
 mutation{
-  addUser(googleId:"2355654s656",username:"Saiful",email:"saiful@gmail.com",phone:"021564566566"){
+  addUser(googleId:"2355654s656",username:"Ahmed sohel",email:"ahmed@gmail.com",phone:"021564566566"){
+    id
     username
     email
     phone
   }
 }
 
+
 ===========================================================
 2.Customer 
 ===========================================================
-
+mutation{
+  addCustomer(userId:"613c61a903804d72542cfe3d",address:"Chittagon Bangladesh",){
+    address
+    id
+  }
+}
+{
+  "data": {
+    "addCustomer": {
+      "address": "Chittagon Bangladesh",
+      "id": "613c61fa03804d72542cfe3f"
+    }
+  }
+}
 
 
 ===========================================================
 3.Invoice..
 ============================================================
 mutation{
-  addInvoice(customer:"613b7ff836600ed3ec94fd9e",orderNo:"#01231df12112",invoiceNo:"AS212212121",shipping:100){
+  addInvoice(customerId:"613c8f6d58439637cf433950",orderNo:"#01231df12112",invoiceNo:"AS212212121",shipping:100){
 		orderNo
     shipping
+  }
+}
+
+query{
+  invoice(id:"613ccafa0512a8cd576ba14a") {
+    id
+    customerId
+    invoiceNo
+    orderNo
+    shipping
+    
   }
 }
 
@@ -38,18 +64,329 @@ mutation{
 }
 
 
-
-
 ============================================================
         GraphQl fetch Data
 ============================================================
+
+//----------------------------------------------------------
+//get all users..
+//----------------------------------------------------------
 query{
   users {
     id
     username
-    githubId
     googleId
-    phone
-    email    
+    githubId
+    email
+    phone    
   }
 }
+//----------------------------------------------------------
+//get single user.
+//----------------------------------------------------------
+query{
+  user(id:"613c58b7b44a94df8064cc22"){
+    id
+    username
+    googleId
+    githubId
+    email
+    phone
+    customer{
+      id
+    }
+    
+  }
+}
+
+//----------------------------------------------------------
+//get all customers..
+//----------------------------------------------------------
+query{
+  customers{
+    id
+    address
+  }
+}
+//----------------------------------------------------------
+//get single customers..
+//----------------------------------------------------------
+query{
+  customer(id:"613b800936600ed3ec94fda0"){
+    id
+    address  
+  }
+}
+
+
+
+//----------------------------------------------------------
+//get all invoices..
+//----------------------------------------------------------
+query{
+  invoices{
+    id
+    orderNo
+  }
+}
+
+//----------------------------------------------------------
+//get single invoices..
+//----------------------------------------------------------
+query{
+  invoice(id:"613b92aa9e20e421fbae2aed"){
+    id
+    orderNo
+    shipping    
+  }
+}
+
+
+//----------------------------------------------------------
+//get all invoiceItems..
+//----------------------------------------------------------
+query{
+  invoiceItems{
+    id
+    productName
+    unitPrice
+    totalQuantity
+  }
+}
+
+//----------------------------------------------------------
+//get single invoiceItems..
+//----------------------------------------------------------
+query{
+  invoiceItem(id:"613b95fa2b09340be6a60051"){
+    id
+    productName
+    unitPrice
+    totalQuantity
+  }
+}
+
+
+//==============================================================
+//Get Relational Data
+//==============================================================
+
+
+//-------------------------------------------------------------
+//user from customer
+//-------------------------------------------------------------
+query{
+  customer(id:"613bca4c519ebabebc4dad05") {
+    id
+    user{
+      id
+      username
+    }
+    
+  }
+}
+//-------------------------------------------------------------
+//customer from user done....
+//-------------------------------------------------------------
+query{
+  user(id:"613c8f2c58439637cf43394e"){
+    id
+    username
+    googleId
+    githubId
+    email
+    phone
+    customer{
+      id
+      address
+      userId
+      
+    }
+    
+  }
+}
+
+
+
+///===================================================================
+//Final Query with all
+//------------------------------------------------------------------
+query{
+  user(id:"613c8f2c58439637cf43394e"){
+    id
+    username
+    googleId
+    githubId
+    email
+    phone
+    customers{
+      id
+      address
+      userId
+      invoices{
+        id
+        invoiceNo
+        orderNo
+        shipping
+        customerId
+        invoiceItems{
+          id
+          invoiceId
+          productName
+          unitPrice
+          totalQuantity
+        }        
+      }      
+    }
+    
+  }
+}
+
+
+
+//===========================================================
+  //Start GraphQl in different way
+//===========================================================
+
+/*
+//this  graphql route will use as api endpoint
+app.use('/graphql',graphqlHTTP({
+  schema: buildSchema(`
+    type Event {
+      _id: ID!   
+      title: String!
+      description:String!
+      price: Float!      
+      date:String
+    }
+
+    type User {
+      _id: ID!   
+      googleId: String
+      githubId: String
+      username:String!
+      email: Float     
+      phone:String
+      customer:String
+    }
+
+    input EventInput {
+      title: String!
+      description:String!
+      price: Float!
+      date:String
+    }
+    
+    type UserInput {
+      googleId: String
+      githubId: String
+      username:String
+      email: Float     
+      phone:String
+      customer:String
+    }
+
+
+    
+    type RootQuery{
+      events: [Event!]!
+      users: [User!]!
+    }
+
+    type RootMutation{
+      createEvent(eventInput: EventInput): Event
+      createUser(userInput: UserInput): User
+    }
+
+    schema{
+      query: RootQuery,
+      mutation:RootMutation
+    }
+
+  `),
+  rootValue:{
+    events: ()=>{
+      return Event.find()
+        .then(events => {        
+            return events.map(event=>{
+              return {
+                ...event._doc, _id:event._doc._id.toString()
+              };
+            });
+        })
+      .catch(err=>{
+        console.log('error to store in db',err);
+        throw err;
+      });
+    },
+    users: ()=>{
+      return User.find()
+        .then(users => {        
+            return users.map(user=>{
+              return {
+                ...user._doc, _id:user._doc._id.toString()
+              };
+            });
+        })
+      .catch(err=>{
+        console.log('error to store in db',err);
+        throw err;
+      });
+    },
+
+
+    //-------------------------------------------
+      //Create Event
+    //-------------------------------------------
+    createEvent: args =>{
+      //------------------------
+      //store in mongoose
+      //------------------------
+      const event = new Event({
+        title:args.eventInput.title,
+        description:args.eventInput.description,
+        price:+args.eventInput.price,
+        date:args.eventInput.date,
+      });
+      return event
+        .save()
+        .then(result=>{
+          console.log('store in db',result);
+          return {...result._doc, _id:result._doc._id.toString()};
+      })
+      .catch(err=>{
+        console.log('error to store in db',err);
+        throw err;
+      });
+    },
+
+
+    //-------------------------------------------
+    //Create User
+    //-------------------------------------------    
+    createUser: args =>{
+      const user = new User({
+        googleId:args.userInput.googleId,
+        githubId:args.userInput.githubId,
+        username:args.userInput.username,
+        email:args.userInput.email,
+        phone:args.userInput.phone,
+        customer:args.userInput.customer,
+      });
+      return user
+        .save()
+        .then(result=>{
+          return {...result._doc, _id:result._doc._id.toString()};
+          // return {...result._doc};
+      })
+      .catch(err=>{
+        throw err;
+      });
+    },
+
+  },
+  graphiql:true
+}));
+
+*/
+

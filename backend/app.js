@@ -16,7 +16,7 @@ import { Strategy as GitHubStrategy } from 'passport-github'; //convert to es6
 import schema from './schemas/Schema';
 import {buildSchema} from 'graphql';
 
-import Event from './models/event'
+// import Event from './models/event'
 // import User from './models/user'
 // import User from './schemas/User';
 
@@ -147,30 +147,30 @@ app.get('/auth/github/callback',passport.authenticate('github', { failureRedirec
 //3.Remote Database connection
 //----------------------------------------------------------------------
 // connected with remote server
-mongoose.connect(`${process.env.MONGODB_PREFIX}${process.env.DB_USER}:${process.env.DB_PASS}${process.env.MONGODB_CLUSTER}${process.env.DB_NAME}${process.env.MONGODB_END}`,{
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(response => {
-    console.log('mongoose remote connection successful');
-})
-.catch(err => {
-    console.log('connection not found ',err)
-});
+// mongoose.connect(`${process.env.MONGODB_PREFIX}${process.env.DB_USER}:${process.env.DB_PASS}${process.env.MONGODB_CLUSTER}${process.env.DB_NAME}${process.env.MONGODB_END}`,{
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true
+// }).then(response => {
+//     console.log('mongoose remote connection successful');
+// })
+// .catch(err => {
+//     console.log('connection not found ',err)
+// });
 
 //----------------------------------------------------------------------
 //connected with Local server
 //----------------------------------------------------------------------
-// mongoose.connect('mongodb://localhost', {
-//   dbName:'node_react_mongoose_graphql',
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true
-// })
-// .then(() => {
-//     console.log('local mongodb connection successful');
-// })
-// .catch(err => {
-//     console.log(err)
-// });
+mongoose.connect('mongodb://localhost', {
+  dbName:'node_react_mongoose_graphql',
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => {
+    console.log('local mongodb connection successful');
+})
+.catch(err => {
+    console.log(err)
+});
 
 //======================================================================
 //4.Application's route
@@ -199,155 +199,11 @@ app.get('/auth/logout',(req,res)=>{
 //----------------------------------------------------------------------------------------------------
   //GRAPHQL START
 //----------------------------------------------------------------------------------------------------
-app.use('/graphql2',graphqlHTTP({
+
+app.use('/graphql',graphqlHTTP({
   schema,
   graphiql:true
 }));
-
-
-
-/*
-//this  graphql route will use as api endpoint
-app.use('/graphql',graphqlHTTP({
-  schema: buildSchema(`
-    type Event {
-      _id: ID!   
-      title: String!
-      description:String!
-      price: Float!      
-      date:String
-    }
-
-    type User {
-      _id: ID!   
-      googleId: String
-      githubId: String
-      username:String!
-      email: Float     
-      phone:String
-      customer:String
-    }
-
-    input EventInput {
-      title: String!
-      description:String!
-      price: Float!
-      date:String
-    }
-    
-    type UserInput {
-      googleId: String
-      githubId: String
-      username:String
-      email: Float     
-      phone:String
-      customer:String
-    }
-
-
-    
-    type RootQuery{
-      events: [Event!]!
-      users: [User!]!
-    }
-
-    type RootMutation{
-      createEvent(eventInput: EventInput): Event
-      createUser(userInput: UserInput): User
-    }
-
-    schema{
-      query: RootQuery,
-      mutation:RootMutation
-    }
-
-  `),
-  rootValue:{
-    events: ()=>{
-      return Event.find()
-        .then(events => {        
-            return events.map(event=>{
-              return {
-                ...event._doc, _id:event._doc._id.toString()
-              };
-            });
-        })
-      .catch(err=>{
-        console.log('error to store in db',err);
-        throw err;
-      });
-    },
-    users: ()=>{
-      return User.find()
-        .then(users => {        
-            return users.map(user=>{
-              return {
-                ...user._doc, _id:user._doc._id.toString()
-              };
-            });
-        })
-      .catch(err=>{
-        console.log('error to store in db',err);
-        throw err;
-      });
-    },
-
-
-    //-------------------------------------------
-      //Create Event
-    //-------------------------------------------
-    createEvent: args =>{
-      //------------------------
-      //store in mongoose
-      //------------------------
-      const event = new Event({
-        title:args.eventInput.title,
-        description:args.eventInput.description,
-        price:+args.eventInput.price,
-        date:args.eventInput.date,
-      });
-      return event
-        .save()
-        .then(result=>{
-          console.log('store in db',result);
-          return {...result._doc, _id:result._doc._id.toString()};
-      })
-      .catch(err=>{
-        console.log('error to store in db',err);
-        throw err;
-      });
-    },
-
-
-    //-------------------------------------------
-    //Create User
-    //-------------------------------------------    
-    createUser: args =>{
-      const user = new User({
-        googleId:args.userInput.googleId,
-        githubId:args.userInput.githubId,
-        username:args.userInput.username,
-        email:args.userInput.email,
-        phone:args.userInput.phone,
-        customer:args.userInput.customer,
-      });
-      return user
-        .save()
-        .then(result=>{
-          return {...result._doc, _id:result._doc._id.toString()};
-          // return {...result._doc};
-      })
-      .catch(err=>{
-        throw err;
-      });
-    },
-
-  },
-  graphiql:true
-}));
-
-*/
-
 
 //----------------------------------------------------------------------------------------------------
   //GRAPHQL END

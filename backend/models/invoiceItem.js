@@ -1,11 +1,6 @@
 import mongoose from 'mongoose';
 
 const invoiceItemsSchema = mongoose.Schema({
-  invoice:{
-    type:mongoose.Types.ObjectId,
-    ref:"Invoice"
-  }, 
-
   productName:{
     type:String,
     require:true
@@ -16,10 +11,10 @@ const invoiceItemsSchema = mongoose.Schema({
     require:true
   },
 
-  // unitQuantity:{
-  //   type:Number,
-  //   require:true
-  // },
+  invoiceId:{
+    type:mongoose.Types.ObjectId,
+    ref:"Invoice"
+  }, 
 
   totalQuantity:{
     type:Number,

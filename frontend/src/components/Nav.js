@@ -13,7 +13,7 @@ function Nav(){
   const dispatch = useDispatch();
 
   useEffect(()=>{
-    dispatch(getAuthDataAction());
+    // dispatch(getAuthDataAction());
   });
 
   const {error,errors,loading,loggedIn,message,user} = useSelector(state=>state.auth);

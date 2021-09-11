@@ -1,41 +1,36 @@
-import './App.css';
 import logo from './logo.svg';
 import React, { Component, useEffect,useState }  from 'react';
 import {Redirect, Route,Switch} from 'react-router-dom'
-import "animate.css"
+
+import ApolloClient from 'apollo-boost'
+import {ApolloProvider} from 'react-apollo'
+
 
 import {connect, useDispatch, useSelector } from 'react-redux'
-
 import Nav from './components/Nav';
 import Login from './containers/login/Login'
-
 import InvoiceLists from './components/invoice/InvoiceLists'
 import Invoice from './components/invoice/InvoiceShow'
 import EditInvoice from './components/invoice/EditInvoice'
 import Dashboard from './components/Dashboard/Index'
 import axios from 'axios'
 import PrivateRoute from './HOC/PrivateRoute';
+import './App.css';
+import "animate.css"
+
+
+
+//apollo client setup
+const client = new ApolloClient({
+  uli:'http://localhost:5000/graphql'
+});
 
 
 function App() {
   const dispatch = useDispatch();
-  // // const auth = useSelector(state => state.auth);
-  // const [userData,setUserData] = useState(null);
-
-  // useEffect(() => {
-  //   axios.get("http://localhost:5000/getUser",{withCredentials:true})
-  //   .then((res)=>{
-  //     if(res.data){
-  //       console.log(res);
-  //       setUserData(res.data)
-  //     }
-  //   });
-  // }, []);
-
-
   return (
+    <ApolloProvider client={client}>
       <div className="App">
-        {/* {userData ? JSON.stringify(useuserDatarData) : '' } */}
         <Nav/>          
           <div className="minHeight content_wrapper">
             
@@ -66,6 +61,7 @@ function App() {
             </Switch>
           </div>
       </div>
+    </ApolloProvider>      
   );
 }
 

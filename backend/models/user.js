@@ -21,10 +21,10 @@ const userSchema = mongoose.Schema({
     type: String,
     required: false,
   },
-  customer:{
-    type:mongoose.Types.ObjectId,
-    ref:"Customer"
-  },
+  // customer:{
+  //   type:mongoose.Types.ObjectId,
+  //   ref:"Customer"
+  // },
 
 });
 
