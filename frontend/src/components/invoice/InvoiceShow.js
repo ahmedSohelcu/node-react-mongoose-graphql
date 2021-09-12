@@ -1,33 +1,47 @@
 import React, { useState,useEffect } from "react";
 import { useDispatch,useSelector } from "react-redux";
 import './invoice.css'
-import { Link } from 'react-router-dom';
 import axios from 'axios'
 import { getAuthDataAction } from './../../redux/actions/auth.actions';
+import { useLocation } from 'react-router-dom'
+import InvoiceItem from './InvoiceItem';
 
-export default function InvoiceShow() {
+import {gql} from 'apollo-boost';
+import {graphql} from 'react-apollo';
+
+import {  
+  Switch,
+  Route,
+  Link,
+  useParams
+} from "react-router-dom";
+
+import {getInvoiceDetails} from '../queries/queries'
+
+function InvoiceShow(props) {
+  // Get ID from URL
+  const {invoiceId} = useParams();
+
   const dispatch = useDispatch();
-//   const todos = useSelector(state => state.getAllTodos); 
-// const auth = useSelector(state => state.auth);
-const [userData,setUserData] = useState(null);
+  const [userData,setUserData] = useState(null);
 
-useEffect(() => {
-  dispatch(getAuthDataAction());
-  // axios.get("http://localhost:5000/getuser",{withCredentials:true})
-  // .then((res)=>{
-  //   if(res.data){
-  //     console.log(res);
-  //     setUserData(res.data)
-  //   }
-  // }).catch(error=>{
-  //   console.log(error);
-  // });
+  const [total,setTotal] = useState(0);
+  const [subtotal,setSubtotal] = useState(0);
 
-  
-}, []);
+  useEffect(()=>{
+    // alert(invoiceId)//123
+  },[]);
+
+  const data = props.data;
 
   return (
+    data.loading ? <div>Loading Invoices...</div> : (
+
     <div className="animate__animated animate__fadeIn">
+
+      {
+        // data ? JSON.stringify(data) : ''
+      }
       <div class="col-md-12  bg-white">
         <div className="invoice_wrapper offset-xl-2 col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12 padding">
           <div className="card">
@@ -38,9 +52,9 @@ useEffect(() => {
 
             <div className="card-header p-4">
               <h3>Invoice</h3>
-              <a className="pt-2 d-inline-block" href="index.html" data-abc="true">BBBootstrap.com</a>
               <div className="float-right">
-                <h3 className="mb-0">Invoice #BBB10234</h3>
+                <h3 className="mb-0">Invoice no #{data.invoice.invoiceNo}</h3>                
+                <p className="mb-0">Order no {data.invoice.orderNo}</p>                
                 Date: 12 Jun,2019
               </div>
             </div>
@@ -48,12 +62,12 @@ useEffect(() => {
             <div className="card-body">
               <div className="row mb-4">
                 <div className="col-sm-6">
-                  <h5 className="mb-3">From:</h5>
-                  <h3 className="text-dark mb-1">Tejinder Singh</h3>
-                  <div>29, Singla Street</div>
-                  <div>Sikeston,New Delhi 110034</div>
-                  <div>Email: contact@bbbootstrap.com</div>
-                  <div>Phone: +91 9897 989 989</div>
+                  <h5 className="mb-1">From:</h5>
+                  <h3 className="text-dark mb-1">Gain Solutions Ltd</h3>
+                  <div> Avenue -11, Road-11, Mirpur DOHS 1182 </div>
+                  <div>Dhaka, Dhaka 1216, BD </div>
+                  <div>Email: gain@emails.homerun.com</div>
+                  <div>Phone: +00 1111 222 55</div>
                 </div>
 
                 <div className="col-sm-6 ">
@@ -80,38 +94,11 @@ useEffect(() => {
                   </thead>
 
                   <tbody>
-                    <tr>
-                      <td className="center">1</td>
-                      <td className="left strong">Iphone 10X</td>
-                      <td className="left">Iphone 10X with headphone</td>
-                      <td className="right">$1500</td>
-                      <td className="center">10</td>
-                      <td className="right">$15,000</td>
-                    </tr>
-                    <tr>
-                      <td className="center">2</td>
-                      <td className="left">Iphone 8X</td>
-                      <td className="left">Iphone 8X with extended warranty</td>
-                      <td className="right">$1200</td>
-                      <td className="center">10</td>
-                      <td className="right">$12,000</td>
-                    </tr>
-                    <tr>
-                      <td className="center">3</td>
-                      <td className="left">Samsung 4C</td>
-                      <td className="left">Samsung 4C with extended warranty</td>
-                      <td className="right">$800</td>
-                      <td className="center">10</td>
-                      <td className="right">$8000</td>
-                    </tr>
-                    <tr>
-                      <td className="center">4</td>
-                      <td className="left">Google Pixel</td>
-                      <td className="left">Google prime with Amazon prime membership</td>
-                      <td className="right">$500</td>
-                      <td className="center">10</td>
-                      <td className="right">$5000</td>
-                    </tr>
+                    {/* show invoice items... */}
+                    {
+                      data.invoice.invoiceItems ? data.invoice.invoiceItems.map((invoiceItem,index)=>
+                        <InvoiceItem  index={index} data={invoiceItem} />): ''
+                    }
                   </tbody>
                 </table>
               </div>
@@ -125,25 +112,20 @@ useEffect(() => {
                         <td className="left">
                           <strong className="text-dark">Subtotal</strong>
                         </td>
-                        <td className="right">$28,809,00</td>
+                        <td className="right">{subtotal}</td>
                       </tr>
                       <tr>
                         <td className="left">
-                          <strong className="text-dark">Discount (20%)</strong>
+                          <strong className="text-dark">Shipping (+)</strong>
                         </td>
-                        <td className="right">$5,761,00</td>
-                      </tr>
-                      <tr>
-                        <td className="left">
-                          <strong className="text-dark">VAT (10%)</strong>
-                        </td>
-                        <td className="right">$2,304,00</td>
-                      </tr>
+                        <td className="right">{data.invoice.shipping}</td>
+                      </tr>                      
+                    
                       <tr>
                         <td className="left">
                           <strong className="text-dark">Total</strong> </td>
                         <td className="right">
-                          <strong className="text-dark">$20,744,00</strong>
+                          <strong className="text-dark">{total}</strong>
                         </td>
                       </tr>
                     </tbody>
@@ -155,16 +137,22 @@ useEffect(() => {
               <p className="mb-0">ahmedsohelcu@gmail.com,Hathazari,Chittaoing,Bangladesh</p>
             </div>
           </div>
-        </div>
-
-
-
-              
-            </div>        
-         </div>        
-    //     </div>
-    //   </div>
-    //   <br/><hr/>
-    // </div>
+        </div>              
+      </div>        
+    </div>        
+  )
   )
 }
+
+export default graphql(getInvoiceDetails)(InvoiceShow);
+
+// export default graphql(getInvoiceDetails,{
+//   options:(invoiceId)=>{
+//     return {
+//       variables:{
+//         id: invoiceId
+//       }
+//     }
+//   }
+// })(InvoiceShow);
+

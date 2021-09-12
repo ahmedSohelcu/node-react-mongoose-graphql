@@ -14,6 +14,18 @@ function Nav(){
 
   useEffect(()=>{
     // dispatch(getAuthDataAction());
+
+    // axios.get('http://localhost:5000/isLoggedIn')
+    // .then(response=>{
+    //   console.log('isLoggedIn');
+    //   console.log(response);
+    // })
+    // .catch(error=>{
+    //   console.log('isLoggedIn');
+    //   console.log(error.response);
+    // })
+
+
   });
 
   const {error,errors,loading,loggedIn,message,user} = useSelector(state=>state.auth);
@@ -21,8 +33,8 @@ function Nav(){
   //-------------------------------
   //logout user
   //-------------------------------
-  const logout = ()=>{   
-    axios.get('http://localhost:5000/auth/logout',{withCredentials:true})
+  const logout = async  ()=>{   
+    await axios.get('http://localhost:5000/auth/logout',{withCredentials:true})
     .then(response=>{
       if(response.status ==='success'){
           window.location ='/';

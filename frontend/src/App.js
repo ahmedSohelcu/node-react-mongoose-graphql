@@ -19,15 +19,18 @@ import './App.css';
 import "animate.css"
 
 
-
 //apollo client setup
-const client = new ApolloClient({
-  uli:'http://localhost:5000/graphql'
+const client = new ApolloClient({   
+  uri:'http://localhost:5000/graphql'
 });
 
 
 function App() {
   const dispatch = useDispatch();
+
+  
+
+
   return (
     <ApolloProvider client={client}>
       <div className="App">
@@ -55,7 +58,7 @@ function App() {
                 <Login />
               </Route>              
 
-              <PrivateRoute exact path="/invoice">
+              <PrivateRoute exact path="/invoice/:invoiceId">
                 <Invoice />
               </PrivateRoute>
             </Switch>

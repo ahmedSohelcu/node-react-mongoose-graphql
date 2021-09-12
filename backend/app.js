@@ -70,8 +70,9 @@ passport.use(new GoogleStrategy({
 function(accessToken, refreshToken, profile, cb) { 
   //Called when successfull authentication is done
   //insert into database.....
- // cb(null,profile);
-  
+ cb(null,profile);
+ 
+  /*
   User.findOne({googleId:profile.id},async (err,doc)=>{
     if(err){      
       cb(err, null);
@@ -87,7 +88,7 @@ function(accessToken, refreshToken, profile, cb) {
       cb(null,newUser);
     }    
     cb(null,doc);
-  });
+  });*/
   
 }));
 
@@ -111,7 +112,8 @@ passport.use(new GitHubStrategy({
   callbackURL: "/auth/github/callback"  
 },
 function(accessToken, refreshToken, profile, cb) {
-  //cb(null,profile);
+  cb(null,profile);
+  /*
   
   User.findOne({githubId:profile.id},async (err,doc)=>{
     if(err){      
@@ -128,7 +130,7 @@ function(accessToken, refreshToken, profile, cb) {
       cb(null,newUser);
     }    
     cb(null,doc);
-  });
+  });*/
   
 }));
 
@@ -147,34 +149,47 @@ app.get('/auth/github/callback',passport.authenticate('github', { failureRedirec
 //3.Remote Database connection
 //----------------------------------------------------------------------
 // connected with remote server
-// mongoose.connect(`${process.env.MONGODB_PREFIX}${process.env.DB_USER}:${process.env.DB_PASS}${process.env.MONGODB_CLUSTER}${process.env.DB_NAME}${process.env.MONGODB_END}`,{
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true
-// }).then(response => {
-//     console.log('mongoose remote connection successful');
-// })
-// .catch(err => {
-//     console.log('connection not found ',err)
-// });
+
+mongoose.connect(`${process.env.MONGODB_PREFIX}${process.env.DB_USER}:${process.env.DB_PASS}${process.env.MONGODB_CLUSTER}${process.env.DB_NAME}${process.env.MONGODB_END}`,{
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(response => {
+    console.log('mongoose remote connection successful');
+})
+.catch(err => {
+    console.log('connection not found ',err)
+});
 
 //----------------------------------------------------------------------
 //connected with Local server
 //----------------------------------------------------------------------
-mongoose.connect('mongodb://localhost', {
-  dbName:'node_react_mongoose_graphql',
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => {
-    console.log('local mongodb connection successful');
-})
-.catch(err => {
-    console.log(err)
-});
+// mongoose.connect('mongodb://localhost', {
+//   dbName:'node_react_mongoose_graphql',
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// })
+// .then(() => {
+//     console.log('local mongodb connection successful');
+// })
+// .catch(err => {
+//     console.log(err)
+// });
 
 //======================================================================
 //4.Application's route
 //======================================================================
+
+//======================================================================
+//Check User is loggged in ro not 
+//======================================================================
+
+function isLoggedIn(req,res,next){  
+  if(req.user){
+    res.send(true);
+  }else{
+    res.send(false);
+  }
+}
 
 //----------------------------------------------------------------------
 //get logged user data

@@ -14,7 +14,7 @@ export default function Index() {
   
   useEffect(() => {    
     console.log('from dashboard component')
-    dispatch(getAuthDataAction());
+    // dispatch(getAuthDataAction());
     
   }, []); 
 
@@ -35,10 +35,11 @@ export default function Index() {
               Dashboard              
             </div>
             <div className="profile_picture">              
-               { user && user.photos.length > 0 ? <img src={user.photos[0].value} /> : '' } 
+               {/* { user && user.photos.length > 0 ? <img src={user.photos[0].value} /> : '' }  */}
             </div>
             
-            {user ? JSON.stringify(user.photos.value) : '' }
+            
+            {user ? JSON.stringify(user) : '' }
 
             <ul className="list-group list-group-flush">              
               <li className="list-group-item"><strong>Name : </strong>{user && user.displayName}</li> 
@@ -48,7 +49,7 @@ export default function Index() {
               <li className="list-group-item"><strong>Email : </strong>sf dsfs f dfs sf s</li>
               <li className="list-group-item"><strong>Email Verified: </strong>ds fsfdsfsd fdsfsf s</li>
               
-              <li className="list-group-item"><strong>Photos : </strong> {user && user.photos ? user.photos[0].value : ''} </li>   
+              {/* <li className="list-group-item"><strong>Photos : </strong> {user && user.photos ? user.photos[0].value : ''} </li>    */}
             </ul>
           </div>
         </div>         

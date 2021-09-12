@@ -31,6 +31,23 @@ mutation{
   }
 }
 
+user
+613e055c3b46f909b04ca55a
+613e05a5d3d169b60c4f043d
+613e05ded3d169b60c4f043f
+613e060dd3d169b60c4f0443
+
+customer
+613e064dd3d169b60c4f0445
+613e066ed3d169b60c4f0447
+613e0687d3d169b60c4f0449
+613e069fd3d169b60c4f044b
+
+invoice
+613e070ad3d169b60c4f044f
+613e0728d3d169b60c4f0451
+613e078cd3d169b60c4f0453
+
 
 ===========================================================
 3.Invoice..
@@ -58,7 +75,7 @@ query{
 4.Invoice items
 ============================================================
 mutation{
-  addInvoiceItem(invoice:"613b92aa9e20e421fbae2aed",productName:"Mac Laptop",unitPrice:150000,totalQuantity:1){
+  addInvoiceItem(invoiceId:"613b92aa9e20e421fbae2aed",productName:"Mac Laptop",unitPrice:150000,totalQuantity:1){
        productName 
   }
 }
